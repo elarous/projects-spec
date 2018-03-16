@@ -1,0 +1,378 @@
+/* Colors */
+$orange-normal : #FF5722;
+$orange-light-1 : #FF8A65;
+$orange-light-2 : #FFAB91;
+$orange-light-3 : #FFCCBC;
+$orange-light-4 : #FBE9E7;
+$orange-dark-1 : #F4511E ;
+$orange-dark-2 : #E64A19;
+$orange-dark-3 : #D84315;
+$orange-dark-4 : #DD2C00;
+
+$brown-dark-3 : #4E342E;
+$brown-lighter: #EFEBE9;
+$brown-light : #D7CCC8;
+
+$red-dark : #B71C1C;
+$red-light-1 : #FFEBEE;
+$red-dark-1 : #D50000;
+
+$gray-dark-700 : #616161;
+$gray-light-100 : #F5F5F5;
+$gray-light-50 : #FAFAFA;
+$gray-light-300 : #E0E0E0;
+
+$notif-info-bg : #E3F2FD;
+$notif-info-fg : #448AFF;
+
+
+$primary-btn-bg : $orange-dark-1;
+$primary-btn-border : $orange-dark-3 2px;
+$primary-btn-color : white;
+
+$primary-btn-hover-bg : $orange-normal;
+$primary-btn-hover-bg : $orange-normal;
+$primary-btn-hover-border : $orange-light-1;
+
+$modal-overlay-bg : rgba(97, 97, 97,0.5);
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes quart-spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(90deg)
+    }
+}
+
+@keyframes spin-third {
+    0% {
+        transform: rotate(-45deg);
+    }
+    100%{
+        transform: rotate(45deg);
+    }
+}
+
+
+.clickable {
+    cursor: pointer;
+}
+
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    height: 100%;
+}
+
+.bg-primary {
+    color: white;
+    background-color: $orange-dark-1 !important;
+}
+
+.btn-primary {
+    background-color : $primary-btn-bg;
+    border : $primary-btn-border;
+    color: $primary-btn-color;
+}
+
+.btn-primary:hover {
+    background-color : $primary-btn-hover-bg;
+    border-color: $primary-btn-hover-border;
+}
+
+.project-view-name {
+    color : $orange-dark-3;
+    padding: 0px;
+    margin: 30px 0px;
+}
+
+.project-view-name-edit {
+    color : $orange-dark-3;
+    width: 100%;
+    border: none;
+    padding: 0px;
+    margin: 30px 0px;
+}
+
+.project-view-name-edit:focus{
+    outline: none;
+}
+
+.project-view-name-edit::placeholder {
+    color: $gray-light-100;
+}
+
+.project-view-quote-icon {
+    font-size: 28px;
+    margin : 10px 0px 10px 30px;
+    color : $gray-dark-700;
+    vertical-align: super;
+}
+
+.project-view-desc {
+    color : $gray-dark-700;
+    font-style: italic;
+    display: inline;
+    font-size: 28px;
+    padding: 15px;
+    margin: 15px;
+}
+
+.project-view-desc-edit {
+    width: 80%;
+    border: none;
+    color : $gray-dark-700;
+    font-style: italic;
+    display: inline;
+    font-size: 28px;
+    margin-left: 30px;
+    padding-right: 10px;
+}
+
+.project-view-desc-edit:focus {
+    outline: none;
+}
+
+
+.project-view-status {
+    margin: 40px 0px;
+    font-size: 20px;
+    background-color: $gray-light-100;
+    padding: 5px;
+    color: $brown-dark-3;
+
+}
+
+
+.iteration {
+    /* background-color : #FFF3E0; */
+    background-color : #FFFDE7;
+    /* background-color: $orange-light-4; */
+    padding: 10px;
+    margin: 10px;
+    text-align : center;
+    /* border-radius: 5px; */
+    box-shadow: 1px 1px 5px $gray-light-300;
+    border: 1px solid $orange-light-2;
+}
+
+.iteration-num {
+    font-size : 34px;
+    background-color : $gray-light-100;
+    color: $brown-dark-3;
+    padding: 0px;
+    margin: 0px;
+    max-height: 34px;
+}
+
+
+.iteration-days-num,.iteration-impl-num {
+    background-color : $orange-dark-4;
+    font-size: 24px;
+    color: white;
+}
+.iteration-days-text,.iteration-impl-text {
+    background-color: $orange-dark-1;
+    font-style: italic;
+    color: white;
+}
+
+.iteration-view-desc{
+    color: $brown-dark-3;
+    font-size: 28px;
+    text-align: center;
+    overflow: visible;
+}
+
+.iteration-view-desc-edit {
+    color: $brown-dark-3;
+    font-size: 28px;
+    border: none;
+    background-color: transparent;
+    height : 56px;
+    width: 100%;
+    text-align: center;
+}
+
+.iteration-view-desc-edit:focus{
+    outline: none;
+}
+/* modal styling */
+.modal-overlay{
+    background-color: $modal-overlay-bg;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 5;
+}
+
+.modal-panel {
+    position: fixed;
+    top: 20%;
+    left : 15%;
+    width: 70%;
+    background-color: white;
+    box-shadow: 3px 3px 15px black;
+    border-radius: 4px;
+    z-index: 10;
+    box-sizing: border-box;
+    font-size: 20px;
+}
+
+.modal-panel .badge {
+    font-size: 20px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.modal-head {
+    font-size: 28px;
+    border-bottom: 1px solid $gray-light-100;
+    margin: 10px 0px 0px 10px;
+    padding: 0px;
+    text-align: left;
+}
+.modal-content {
+    border: none;
+    border-bottom: 1px solid $gray-light-100;
+    margin: 10px 0px;
+    padding: 15px 10px;
+}
+
+.modal-btns {
+    text-align: right;
+}
+.modal-btns .btn {
+    margin-right: 10px;
+}
+
+#add-project-btn,#add-iteration-btn {
+    background-color: $orange-normal;
+    color: white;
+    padding: 20px;
+    font-size: 50px;
+    border-radius: 50%;
+    position: fixed;
+    bottom: 5px;
+    right: 5px;
+    box-shadow: 1px 1px 3px $gray-dark-700;
+    transition: background-color 0.5s, color 0.5s;
+    z-index: 10;
+}
+
+#add-project-btn:hover, #add-iteration-btn:hover{
+    background-color: white;
+    color : $orange-normal;
+    animation: quart-spin 0.5s linear ;
+    box-shadow: 0px 0px 3px $gray-dark-700;
+}
+
+.project-delete-btn {
+    color: red;
+    background-color: transparent;
+    font-weight : bold;
+    border: none;
+    padding: 2px 2px;
+    margin: 0px;
+    text-align: right;
+    width: 15px;
+    position : absolute;
+    top: 0px;
+    right: 0px;
+    display: none;
+}
+
+
+/* .iteration-delete-btn { */
+/*     color: red; */
+/*     background-color: yellow; */
+/*     font-weight : bold; */
+/*     border: none; */
+/*     padding: 2px 2px; */
+/*     margin: 0px; */
+/*     float: right; */
+/*     display: inline; */
+/*     width: 100%; */
+/* } */
+
+
+.project-delete-btn:focus , .iteration-delete-btn:focus{
+    outline: none;
+}
+
+.project-card {
+    margin-bottom: 15px;
+}
+.project-card:hover > .project-delete-btn {
+    display: block;
+}
+
+#notifier-container {
+    width: 100%;
+    position: fixed;
+    /* bottom: 0px; */
+    bottom: -28px;
+    left: 0px;
+    z-index: 5;
+    height: 35px;
+    padding: 5px;
+    box-shadow: 1px 1px 3px $gray-dark-700;
+    transition: bottom 1s;
+}
+
+
+#notifier {
+    bottom: 0px;
+    text-align: left;
+    /* overflow: auto; */
+    height: 100%;
+    box-sizing: border-box;
+    font-size: 18px;
+}
+
+#notif-icon {
+    /* display: inline; */
+    display : block;
+    float: left;
+    font-size: 23px;
+}
+
+#notif-content {
+    display: inline;
+    margin-left: 10px;
+}
+
+.info {
+    color: #01579B;
+    background-color : #E1F5FE;
+}
+
+.error {
+    color: $red-light-1;
+    background-color:  $red-dark-1;
+}
+
+.loader {
+    border: 8px solid $orange-light-2;
+    border-top: 8px solid $orange-dark-3;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    float: left;
+    animation: spin 0.5s linear 0s infinite;
+}
+
+.operation{
+    color: $orange-dark-4;
+    background-color: $orange-light-4;
+}
