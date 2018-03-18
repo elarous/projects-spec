@@ -4,16 +4,19 @@
     transform: rotate(0deg); }
   100% {
     transform: rotate(360deg); } }
+
 @keyframes quart-spin {
   0% {
     transform: rotate(0deg); }
   100% {
     transform: rotate(90deg); } }
+
 @keyframes spin-third {
   0% {
     transform: rotate(-45deg); }
   100% {
     transform: rotate(45deg); } }
+
 .clickable {
   cursor: pointer; }
 
@@ -282,5 +285,3 @@ html, body {
 .operation {
   color: #DD2C00;
   background-color: #FBE9E7; }
-
-/*# sourceMappingURL=screen.css.map */

@@ -1,7 +1,7 @@
-(ns projects-spec.modals
+(ns projects-spec.views.modals
   (:require [reagent.core :as r]
             [re-frame.core :as rf]
-            [projects-spec.events]))
+            ))
 
 (defn head [{:keys [text on-close-click]}]
   [:div.row.modal-head
