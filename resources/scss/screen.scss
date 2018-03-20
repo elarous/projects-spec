@@ -22,8 +22,15 @@ $gray-light-100 : #F5F5F5;
 $gray-light-50 : #FAFAFA;
 $gray-light-300 : #E0E0E0;
 
-$notif-info-bg : #E3F2FD;
-$notif-info-fg : #448AFF;
+$light-green-800 : #558B2F;
+$light-green-300: #AED581;
+$light-green-700: #689F38;
+$light-green-200: #C5E1A5;
+
+
+
+$notif-info-fg : #E3F2FD;
+$notif-info-bg : #448AFF;
 
 
 $primary-btn-bg : $orange-dark-1;
@@ -353,8 +360,8 @@ html, body {
 }
 
 .info {
-    color: #01579B;
-    background-color : #E1F5FE;
+    background-color: #01579B;
+    color : #E1F5FE;
 }
 
 .error {
@@ -375,4 +382,85 @@ html, body {
 .operation{
     color: $orange-dark-4;
     background-color: $orange-light-4;
+}
+
+.add-stakeholder {
+    color : $light-green-300;
+    background-color: $light-green-800;
+    box-shadow: 1px 1px 1px $gray-dark-700;
+    font-size: 70px;
+    border-radius: 50%;
+    padding: 15px;
+}
+
+.add-stakeholder:hover{
+    color : $light-green-200;
+    background-color: $light-green-700;
+    box-shadow: 1px 1px 3px $gray-dark-700;
+    cursor: pointer;
+}
+.add-stakeholder:hover + .add-stakeholder-msg {
+    opacity: 1;
+}
+
+.add-stakeholder-msg {
+    color: $light-green-800;
+    font-size: 20px;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.stakeholder-specs-num {
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.stakeholder-name {
+    font-size: 24px;
+    padding: 0px;
+    margin: 5px;
+    text-align: center;
+}
+
+.stakeholder-name-edit {
+    font-size: 24px;
+    text-align: center;
+    border: none;
+    margin: 5px;
+    padding : 0px;
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.stakeholder-desc {
+    font-size: 18px;
+    padding: 0px;
+    margin: 5px;
+    text-align: center;
+}
+
+.stakeholder-desc-edit {
+    font-size: 18px;
+    text-align: center;
+    border: none;
+    margin: 5px;
+    padding : 0px;
+    width: 100%;
+    outline: none;
+    resize: none;
+    height: 100%;
+
+}
+
+.stakeholder-delete-btn, .stakeholder-fg-control, .stakeholder-bg-control {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.stakeholder-card:hover .stakeholder-delete-btn,
+.stakeholder-card:hover .stakeholder-fg-control,
+.stakeholder-card:hover .stakeholder-bg-control{
+    opacity: 1;
 }

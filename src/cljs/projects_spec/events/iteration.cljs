@@ -11,10 +11,7 @@
                                    path
                                    debug]
              :as rf]
-            [projects-spec.events.common :refer [info
-                                                 error
-                                                 operation
-                                                 update-coll-item-by-id
+            [projects-spec.events.common :refer [update-coll-item-by-id
                                                  millis->days]]))
 
 
@@ -133,49 +130,52 @@
 (reg-event-fx
  :validate-iteration-desc
  (fn [{db :db} [_ id name]]
-   (if-not (s/blank? name)
-     (do
-       (rf/dispatch [:toggle-edit-iteration-desc id])
-       (rf/dispatch [:save-iteration id]))
-     (error "Iteration description should not be blank !"))))
+   {:dispatch-n
+    [(if-not (s/blank? name)
+       (do
+         [:toggle-edit-iteration-desc id]
+         [:save-iteration id])
+       [:notify :error "Iteration description should not be blank !"])]}))
 
 
 (reg-event-fx
  :delete-iteration
  (fn [{db :db} [_ id]]
-   (operation "Deleting Iteration ...")
    {:http-xhrio {:method :post
                  :uri "/api/iteration/delete"
                  :params {:id id}
                  :format (ajax/json-request-format)
                  :response-format (ajax/text-response-format)
                  :on-success [:iteration-deleted id]
-                 :on-failure [:bad-response]}}))
+                 :on-failure [:bad-response]}
+    :dispatch
+    [:notify :operation "Deleting Iteration ..."]}))
 
-(reg-event-db
+(reg-event-fx
  :iteration-deleted
- (fn [db [_ id]]
-   (info (str "Iteration " (iter-num db id) " Deleted Successfully."))
-   (update db :iterations
-           (fn [its] (remove #(= (:id %) id) its)))))
+ (fn [{db :db} [_ id]]
+   {:db (update db :iterations
+                (fn [its] (remove #(= (:id %) id) its)))
+    :dispatch
+    [:notify :info (str "Iteration " (iter-num db id) " Deleted Successfully.")]}))
 
 (reg-event-fx
  :create-new-iteration
  (fn [_ [_ id]]
-   (operation "Create New Iteration ...")
    {:http-xhrio {:method :post
                  :uri "/api/iteration/create"
                  :params {:project-id id}
                  :format (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [:iteration-created]
-                 :on-failure [:bad-response]}}))
+                 :on-failure [:bad-response]}
+    :dispatch
+    [:notify :operation "Create New Iteration ..."]}))
 
 
 (reg-event-fx
  :save-iteration
  (fn [{db :db} [_ id]]
-   (operation (str "Saving Iteration ..."))
    {:http-xhrio {:method :post
                  :uri "/api/iteration/save"
                  :params {:iteration (-> (iter-by-id (:iterations db) id)
@@ -184,24 +184,22 @@
                  :format (ajax/json-request-format)
                  :response-format (ajax/text-response-format)
                  :on-success [:iteration-saved id]
-                 :on-failure [:bad-response]}}))
+                 :on-failure [:bad-response]}
+    :dispatch [:notify :operation "Saving Iteration ..."]}))
 
 
-(reg-event-db
+(reg-event-fx
  :iteration-saved
- (fn [db [_ id]]
-   (info (str "Iteration " (iter-num db id) " saved successfully."))
-   db))
-
-;; a helper function to dispatch both events, i don't think this is how it should be done, however
-(defn- change-iteration-both-days [id]
-  (rf/dispatch [:change-iteration-days-left id])
-  (rf/dispatch [:change-iteration-days-passed id]))
+ (fn [{db :db} [_ id]]
+   {:dispatch
+    [:notify :info (str "Iteration " (iter-num db id) " saved successfully.")]}))
 
 (reg-event-fx
  :iteration-created
  (fn [{db :db} [_ response]]
    (let [iteration (js->clj response)]
-     (info (str "Iteration (id : " (:id iteration) ") created successfully."))
-     (change-iteration-both-days (:id iteration))
-     {:db (update db :iterations #(conj % iteration))})))
+     {:db (update db :iterations #(conj % iteration))
+      :dispatch-n
+      [[:change-iteration-days-left (:id iteration)]
+       [:change-iteration-days-passed (:id iteration)]
+       [:notify :info (str "Iteration (id : " (:id iteration) ") created successfully.")]]})))

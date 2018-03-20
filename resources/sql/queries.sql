@@ -80,7 +80,7 @@ DELETE FROM iteration WHERE project_id = :project_id
 -- :name create-stakeholder! :! :n
 -- :doc create a stakeholder record
 INSERT INTO stakeholder
-       VALUES (NULL,:name,:description)
+       VALUES (NULL,:name,:description,:project_id,:fg_color,:bg_color)
 
 
 -- :name delete-stakeholder! :! :n
@@ -91,7 +91,10 @@ DELETE FROM stakeholder WHERE id = :id
 -- :doc update a stakeholder record given id
 UPDATE stakeholder
        SET name = :name,
-           description = :description
+           description = :description,
+           project_id = :project_id,
+           fg_color = :fg_color,
+           bg_color = :bg_color
        WHERE id = :id
 
 -- :name get-stakeholder :? :1
@@ -101,6 +104,10 @@ SELECT * FROM stakeholder WHERE id = :id
 -- :name get-all-stakeholders :? :*
 -- :doc retrieves all stakeholders
 SELECT * FROM stakeholder
+
+-- :name get-last-stakeholder :? :1
+-- :doc retrieves the last inserted stakeholder
+SELECT * FROM stakeholder WHERE project_id = :project_id ORDER BY id DESC LIMIT 1
 
 -- :name create-spec! :! :n
 -- :doc create a specification record

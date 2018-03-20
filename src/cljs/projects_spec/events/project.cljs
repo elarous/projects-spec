@@ -11,10 +11,7 @@
                                    path
                                    debug]
              :as rf]
-            [projects-spec.events.common :refer [info
-                                                 error
-                                                 operation
-                                                 update-coll-item-by-id
+            [projects-spec.events.common :refer [update-coll-item-by-id
                                                  millis->days]]))
 
 
@@ -149,11 +146,12 @@
 (reg-event-fx
  :validate-project-name
  (fn [{db :db} [_ id name]]
-   (if-not (s/blank? name)
-     (do
-       (rf/dispatch [:toggle-edit-project-name])
-       (rf/dispatch [:save-project id]))
-     (error "Project name should not be blank !"))))
+   {:dispatch-n
+    [(if-not (s/blank? name)
+       (do
+         [:toggle-edit-project-name]
+         [:save-project id])
+       [:notify :error "Project name should not be blank !"])]}))
 
 
 (reg-event-db
@@ -172,35 +170,37 @@
 (reg-event-fx
  :validate-project-desc
  (fn [{db :db} [_ id desc]]
-   (if-not (s/blank? desc)
-     (do
-       (rf/dispatch [:toggle-edit-project-desc])
-       (rf/dispatch [:save-project id]))
-     (error "Project desc should not be blank !"))))
+   {:dispatch-n
+    [(if-not (s/blank? desc)
+       (do
+         [:toggle-edit-project-desc]
+         [:save-project id])
+       [:notify :error "Project desc should not be blank !"])]}))
 
 
 (reg-event-fx
  :create-new-projet
  (fn [_ [_]]
-   (operation "Creating New Project ...")
    {:http-xhrio {:method :post
                  :uri "/api/project/create"
                  :format (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [:project-created]
-                 :on-failure [:bad-response]}}))
+                 :on-failure [:bad-response]}
+    :dispatch
+    [:notify :operation "Creating New Project ..."]}))
 
-(reg-event-db
+(reg-event-fx
  :project-created
- (fn [db [_ response]]
-   (info "Project Created Successfully.")
-   (update db :projects #(conj % (js->clj response)))))
+ (fn [{db :db} [_ response]]
+   {:db (update db :projects #(conj % (js->clj response)))
+    :dispatch
+    [:notify :info "Project Created Successfully."]}))
 
 
 (reg-event-fx
  :change-project-img
  (fn [{db :db} [_ id files]]
-   (operation "Uploading Project Image ...")
    (let [file (aget files 0)
          ext (-> (.-name file)
                  (s/split #"\.")
@@ -215,43 +215,44 @@
                    :response-format (ajax/raw-response-format)
                    :timeout 5000
                    :on-success [:project-img-changed id filename]
-                   :on-failure [:bad-response]}})))
+                   :on-failure [:bad-response]}
+      :dispatch [:notify :operation "Uploading Project Image ..."]})))
 
 
-(reg-event-db
+(reg-event-fx
  :project-img-changed
- (fn [db [_ id filename]]
-   (info "Project Image Changed Successfully.")
-   (update db :projects #(update-coll-item-by-id %
-                                                 id
-                                                 :img_src
-                                                 filename))))
+ (fn [{db :db} [_ id filename]]
+   {:db (update db :projects #(update-coll-item-by-id %
+                                                      id
+                                                      :img_src
+                                                      filename))
+    :dispatch [:notify :info "Project Image Changed Successfully."]}))
 
 
 (reg-event-fx
  :delete-project
  (fn [{db :db} [_ id]]
-   (operation "Deleting Project ...")
    {:http-xhrio {:method :post
                  :uri "/api/project/delete"
                  :params {:id id}
                  :format (ajax/json-request-format)
                  :response-format (ajax/json-response-format {:keywords? true})
                  :on-success [:project-deleted id]
-                 :on-failure [:bad-response]}}))
+                 :on-failure [:bad-response]}
+    :dispatch [:notify :operation "Deleting Project ..."]}))
 
 
-(reg-event-db
+(reg-event-fx
  :project-deleted
- (fn [db [_ id]]
-   (info (str "Project '" (project-name db id) "' Deleted Successfully."))
-   (update db :projects
-           (fn [prs] (remove #(= (:id %) id) prs)))))
+ (fn [{db :db} [_ id]]
+   {:db (update db :projects
+                (fn [prs] (remove #(= (:id %) id) prs)))
+    :dispatch
+    [:notify :info (str "Project '" (project-name db id) "' Deleted Successfully.")]}))
 
 (reg-event-fx
  :save-project
  (fn [{db :db} [_ id]]
-   (operation (str "Saving Project '" (project-name db id) "' ..."))
    {:http-xhrio {:method :post
                  :uri "/api/project/save"
                  :params {:project (-> (project-by-id (:projects db) id)
@@ -260,10 +261,12 @@
                  :format (ajax/json-request-format)
                  :response-format (ajax/text-response-format)
                  :on-success [:project-saved id]
-                 :on-failure [:bad-response]}}))
+                 :on-failure [:bad-response]}
+    :dispatch
+    [:notify :operation (str "Saving Project '" (project-name db id) "' ...")]}))
 
-(reg-event-db
+(reg-event-fx
  :project-saved
- (fn [db [_ id]]
-   (info (str "Project '" (project-name db id) "' saved successfully."))
-   db))
+ (fn [{db :db} [_ id]]
+   {:dispatch
+    [:notify :info (str "Project '" (project-name db id) "' saved successfully.")]}))

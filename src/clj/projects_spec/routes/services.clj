@@ -11,7 +11,7 @@
             [projects-spec.routes.services.iteration :refer :all]
             [projects-spec.routes.services.util :refer :all]
             [projects-spec.routes.services.specification :refer :all]
-            [projects-spec.routes.services.stakeholder :refer :all])
+            [projects-spec.routes.services.stakeholder :refer :all :as stk])
   (:import org.joda.time.DateTime))
 
 (defapi service-routes
@@ -110,6 +110,22 @@
                 :path-params [id :- Long]
                 :summary "get the stakeholder given id"
                 (ok (db/get-stakeholder {:id id})))
+
+           (POST "/stakeholder/save" []
+                 :body-params [stakeholder :- Stakeholder]
+                 :summary "Save the modified stakeholder"
+                 (save-stakeholder! stakeholder))
+
+           (POST "/stakeholder/create" []
+                 :return Stakeholder
+                 :body-params [project_id :- Long]
+                 :summary "Create a new stakeholder"
+                 (create-stakeholder! project_id))
+
+           (POST "/stakeholder/delete" []
+                 :body-params [id :- Long]
+                 :summary "delete the stakeholder with the given id"
+                 (delete-stakeholder! id))
 
            (GET "/stakeholders" []
                 :return [Stakeholder]

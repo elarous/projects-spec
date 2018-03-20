@@ -12,16 +12,6 @@
                                    debug]
              :as rf]))
 
-
-(defn info [msg]
-  (rf/dispatch [:notify :info msg]))
-
-(defn error [msg]
-  (rf/dispatch [:notify :error msg]))
-
-(defn operation [msg]
-  (rf/dispatch [:notify :operation msg]))
-
 (defn update-coll-item-by-id [coll id k new-val]
   (let [new-item (assoc (->> coll
                              (some #(and (= (:id %) id) %)))

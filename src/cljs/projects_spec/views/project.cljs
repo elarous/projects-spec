@@ -7,7 +7,9 @@
             [projects-spec.views.modals :refer [iteration-days-modal
                                                 project-days-modal]]
             [projects-spec.views.common :refer [notifier]]
-            [projects-spec.views.iteration :refer [iteration-view]]))
+            [projects-spec.views.iteration :refer [iteration-view]]
+            [projects-spec.views.stakeholder :refer [stakeholder-view
+                                                     add-stakeholder-btn]]))
 
 ;; Project
 (defn project-view-status [id]
@@ -75,6 +77,16 @@
   [:i#add-iteration-btn.fas.fa-plus-circle.clickable
    {:on-click #(rf/dispatch [:create-new-iteration project-id])}])
 
+(defn project-stakeholders [id]
+  (let [stakeholders @(rf/subscribe [:project-stakeholders id])]
+  [:div.row
+     (for [stk stakeholders]
+       ^{:key (:id stk)}
+       [:div.col-sm-6.col-md-4.mb-3
+        [stakeholder-view (:id stk)]])
+     [add-stakeholder-btn id]
+     ]))
+;;
 (defn project-view-page []
   (if-let [id @(rf/subscribe [:project-view])]
     [:div.container.pt-3
@@ -84,6 +96,7 @@
        [:i.project-view-quote-icon {:class "fa fa-quote-left"}]
        [project-view-desc id]
        [project-view-status id]
+       [project-stakeholders id]
        (if-let [iterations @(rf/subscribe [:project-iterations id])]
          (for [iteration iterations]
            ^{:key (:id iteration)} [iteration-view (:id iteration)]))
